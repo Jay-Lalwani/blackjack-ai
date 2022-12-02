@@ -2,7 +2,6 @@ import os
 import random
 import time
 import sys
-from re import A
 sys.setrecursionlimit(20000)
 
 #Type Number of Decks followed by 'count' to enable Griffin Ultimate Card Counting ex. for 4 decks with card count --> '4count'
