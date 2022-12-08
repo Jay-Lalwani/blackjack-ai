@@ -1,5 +1,6 @@
 import os
 import random
+from re import A
 
 #Type Number of Decks followed by 'count' to enable Griffin Ultimate Card Counting ex. for 4 decks with card count --> '4count'
 #Deck is replenished and shuffled when less than a quarter of the cards remain
@@ -25,6 +26,33 @@ losses = 0
 profit = 0
 #initialize omega II card count
 ogCount = 0
+
+# def display_card(card):
+#   print("┌────┐")
+#   print("│{:<2}  │".format(card))
+#   print("│    │")
+#   print("│    │")
+#   print("│  {:>2}│".format(card))
+#   print("└────┘")
+  
+def display_card(cards):
+  for card in cards:
+    print("┌────┐ ", end="")
+  print()
+  for card in cards:
+    print("│{:<2}  │ ".format(card), end="")
+  print()
+  for i in range(3):
+    for card in cards:
+      print("│    │ ", end="")
+    print()
+  for card in cards:
+    print("│  {:>2}│ ".format(card), end="")
+  print()
+  for card in cards:
+    print("└────┘ ", end="")
+  print()
+  print()
 
 def deal(deck):
 
@@ -101,8 +129,13 @@ def print_results(dealer_hand, player_hand):
     print("-"*30+"\n")
     print("    \033[1;32;40mWINS:  \033[1;37;40m%s   \033[1;31;40mLOSSES:  \033[1;37;40m%s\n" % (wins, losses))
     print("-"*30+"\n")'''
-    print ("The dealer has a " + str(dealer_hand) + " for a total of " + str(total(dealer_hand)))
-    print ("You have a " + str(player_hand) + " for a total of " + str(total(player_hand)))
+    print ("The dealer has:")
+    display_card(dealer_hand)
+    print("Dealer Total: " + str(total(dealer_hand)))
+    print()
+    print("You have:")
+    display_card(player_hand)
+    print("Your Total: " + str(total(player_hand)))
 
 def updateCount(cardsSeen):
 
@@ -124,7 +157,7 @@ def blackjack(dealer_hand, player_hand, bet):
             print("Push. Your score is equal to the dealer. It's a tie\n")
             print( "Hand Winnings: $0\n")
             updateCount(dealer_hand + player_hand)
-            play_again
+            play_again()
         else:
             print_results(dealer_hand, player_hand)
             updateCount(dealer_hand + player_hand)
@@ -144,7 +177,8 @@ def blackjack(dealer_hand, player_hand, bet):
             '''
             if ins == 'y':
                 insBet = bet // 2
-                print("The dealer is showing: " + str(dealer_hand))
+                print("The dealer is showing: ") 
+                display_card(dealer_hand)
     if total(dealer_hand) == 21:
         if insBet == 0:
             print()
@@ -236,9 +270,13 @@ def game():
         print('Deck Reshuffled\n')
     dealer_hand = deal(deck)
     player_hand = deal(deck)
-    print ("The dealer is showing a " + str(dealer_hand[0]))
+    print ("The dealer is showing:")
+    display_card([dealer_hand[0]])
     print()
-    print ("You have a " + str(player_hand) + " for a total of " + str(total(player_hand)))
+    print ("You have:")
+    display_card(player_hand)
+    print("Hand total: " + str(total(player_hand)))
+    print()
     blackjack(dealer_hand, player_hand, bet)
 
     '''
@@ -280,7 +318,7 @@ def game():
 '''
         if choice == 'h':
             hit(player_hand)
-            print(player_hand)
+            display_card(player_hand)
             print("Hand total: " + str(total(player_hand)))
             if total(player_hand)>21:
                 print('You busted\n')
@@ -293,7 +331,7 @@ def game():
             print('Doubled')
             
             hit(player_hand)
-            print(player_hand)
+            display_card(player_hand)
             print("Hand total: " + str(total(player_hand)))
             if total(player_hand)>21:
                 print('You busted\n')
@@ -306,10 +344,11 @@ def game():
             else:
                 print()
                 print("Dealer:")
+                display_card(dealer_hand)
                 while total(dealer_hand)<17:
                     
                     hit(dealer_hand)
-                    print(dealer_hand)
+                    display_card(dealer_hand)
                     if total(dealer_hand)>21:
                         print('Dealer busts, you win!\n')
                         wins += 1
@@ -323,10 +362,11 @@ def game():
         elif choice=='s':
             print()
             print("Dealer:")
+            display_card(dealer_hand)
             while total(dealer_hand)<17:
                 
                 hit(dealer_hand)
-                print(dealer_hand)
+                display_card(dealer_hand)
                 if total(dealer_hand)>21:
                     print('Dealer busts, you win!\n')
                     wins += 1
@@ -343,7 +383,9 @@ def game():
             hit(player_hand1)
             hit(player_hand2)
             print()
-            print ("You have a " + str(player_hand1) + " for a total of " + str(total(player_hand1)) + " on Hand 1")
+            print ("Hand 1:")
+            display_card(player_hand1)
+            print("Hand 1 total: " + str(total(player_hand1)))
             while True:
 
                 choice = input("Do you want to [H]it or [S]tand Hand 1: ").lower()
@@ -355,14 +397,16 @@ def game():
 
                 if choice == 'h' or choice == 'd':
                     hit(player_hand1)
-                    print(player_hand1)
+                    display_card(player_hand1)
                     print("Hand 1 total: " + str(total(player_hand1)))
                     if total(player_hand1)>21:
                         print('You busted on Hand 1\n')
                         losses += 1
                         profit -= bet
                         print( 'Hand 1 Winnings: $' + str(-1*bet) + "\n")
-                        print ("You have a " + str(player_hand2) + " for a total of " + str(total(player_hand2)) + " on Hand 2")
+                        print("Hand 2:")
+                        display_card(player_hand2)
+                        print("Hand 2 total: " + str(total(player_hand2)))
                         while True:
                             
                             choice = input("Do you want to [H]it or [S]tand Hand 2: ").lower()
@@ -375,7 +419,7 @@ def game():
 
                             if choice == 'h' or choice == 'd':
                                 hit(player_hand2)
-                                print(player_hand2)
+                                display_card(player_hand2)
                                 print("Hand 2 total: " + str(total(player_hand2)))
                                 if total(player_hand2)>21:
                                     print('You busted on Hand 2\n')
@@ -387,10 +431,11 @@ def game():
                             elif choice=='s':
                                 print()
                                 print("Dealer:")
+                                display_card(dealer_hand)
                                 while total(dealer_hand)<17:
                                     
                                     hit(dealer_hand)
-                                    print(dealer_hand)
+                                    display_card(dealer_hand)
                                     if total(dealer_hand)>21:
                                         print('Dealer busts, you win Hand 2!\n')
                                         wins += 1
@@ -404,7 +449,9 @@ def game():
                                 play_again()
                 elif choice=='s':
                     print()
-                    print ("You have a " + str(player_hand2) + " for a total of " + str(total(player_hand2)) + " on Hand 2")
+                    print("Hand 2:")
+                    display_card(player_hand2)
+                    print("Hand 2 total: " + str(total(player_hand2)))
                     while True:
                         choice = input("Do you want to [H]it or [S]tand Hand 2: ").lower()
 
@@ -416,7 +463,7 @@ def game():
 
                         if choice == 'h' or choice == 'd':
                             hit(player_hand2)
-                            print(player_hand2)
+                            display_card(player_hand2)
                             print("Hand 2 total: " + str(total(player_hand2)))
                             if total(player_hand2)>21:
                                 print('You busted on Hand 2\n')
@@ -425,10 +472,11 @@ def game():
                                 ( 'Hand 2 Winnings: $' + str(-1*bet) + "\n")
                                 print()
                                 print("Dealer:")
+                                display_card(dealer_hand)
                                 while total(dealer_hand)<17:
                                     
                                     hit(dealer_hand)
-                                    print(dealer_hand)
+                                    display_card(dealer_hand)
                                     if total(dealer_hand)>21:
                                         print('Dealer busts, you win Hand 1!\n')
                                         wins += 1
@@ -443,10 +491,11 @@ def game():
                         elif choice=='s':
                             print()
                             print("Dealer:")
+                            display_card(dealer_hand)
                             while total(dealer_hand)<17:
                                 
                                 hit(dealer_hand)
-                                print(dealer_hand)
+                                display_card(dealer_hand)
                                 if total(dealer_hand)>21:
                                     print('Dealer busts, you win Both Hands!\n')
                                     wins += 2
