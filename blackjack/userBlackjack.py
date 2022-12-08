@@ -1,6 +1,5 @@
 import os
 import random
-from re import A
 
 #Type Number of Decks followed by 'count' to enable Griffin Ultimate Card Counting ex. for 4 decks with card count --> '4count'
 #Deck is replenished and shuffled when less than a quarter of the cards remain
